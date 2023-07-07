@@ -1,4 +1,5 @@
 # These are dependencies required by our continuous integration and testing pipelines
 coverage
 pip-licenses
+licensecheck
 -r requirements.api.txt

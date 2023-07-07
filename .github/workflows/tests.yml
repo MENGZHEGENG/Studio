@@ -43,8 +43,13 @@ jobs:
         run: |
           # coding style: we want black compliance
           find . -name \*.py | xargs black --check
-          # Legal check: make sure we don't have or introduce GPL dependencies
+
+      - name: License audit for dependencies
+        # Legal check: make sure we don't have or introduce GPL dependencies
+        run: |
           if pip-licenses | grep -v 'Artistic License' | grep -v LGPL | grep GNU; then echo 'Please avoid introducing *GPL dependencies'; false; fi
+          echo $'\n[metadata]\nlicense = MIT' >> setup.cfg
+          licensecheck -u requirements.txt --zero
 
       - uses: codecov/codecov-action@v3
         with:
