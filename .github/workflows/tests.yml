@@ -49,7 +49,7 @@ jobs:
         run: |
           if pip-licenses | grep -v 'Artistic License' | grep -v LGPL | grep GNU; then echo 'Please avoid introducing *GPL dependencies'; false; fi
           echo $'\n[metadata]\nlicense = MIT' >> setup.cfg
-          licensecheck -u requirements.txt --zero
+          echo MIT | licensecheck -u requirements.txt --zero
 
       - uses: codecov/codecov-action@v3
         with:
