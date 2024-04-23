@@ -21,6 +21,7 @@ from typing import Any
 from lxml import etree
 
 from readalongs.log import LOGGER
+from readalongs.text.util import parse_xml
 
 JS_BUNDLE_URL = "https://unpkg.com/@readalongs/web-component@^1.0.0/dist/bundle.js"
 FONTS_BUNDLE_URL = (
@@ -61,9 +62,7 @@ def encode_from_path(path: str) -> str:
     with open(path, "rb") as f:
         path_bytes = f.read()
     if str(path).endswith("xml") or str(path).endswith(".readalong"):
-        root = etree.fromstring(
-            path_bytes, parser=etree.XMLParser(resolve_entities=False)
-        )
+        root = parse_xml(path_bytes)
         for img in root.xpath("//graphic"):
             url = img.get("url")
             if url.startswith("http"):
