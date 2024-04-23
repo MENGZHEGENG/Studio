@@ -11,10 +11,16 @@ from os.path import exists, join
 from unittest import main
 
 from basic_test_case import BasicTestCase
+from lxml import etree
 from lxml.html import fromstring
 from sound_swallower_stub import SoundSwallowerStub
 
+from readalongs.align import create_ras_from_text
 from readalongs.cli import align, langs
+from readalongs.text.add_ids_to_xml import add_ids
+from readalongs.text.convert_xml import convert_xml
+from readalongs.text.tokenize_xml import tokenize_xml
+from readalongs.text.util import parse_xml
 
 
 def write_file(filename: str, file_contents: str) -> str:
@@ -622,6 +628,15 @@ class TestAlignCli(BasicTestCase):
         self.assertEqual(
             slurp_text(base_file, "utf-8"), slurp_text(bom_file_pathlib, "utf-8-sig")
         )
+
+    def test_tokens_with_empty_g2p(self):
+        text = "Kanien'kéha ' :"
+        xml_text = parse_xml(create_ras_from_text([text], ["moh"]))
+        xml = tokenize_xml(xml_text)
+        xml = add_ids(xml)
+        xml, valid = convert_xml(xml)
+        print(etree.tostring(xml).decode("utf-8"))
+        # word_sequences = get_sequences(xml)
 
 
 if __name__ == "__main__":
